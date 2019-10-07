@@ -31,6 +31,8 @@ Find more advanced usage guidelines below **Rules.**
 - Match the **suit** (Clubs, Diamonds, Hearts, Spades) of the pile's top card.
 - Match the **rank** (Ace to King) of the pile's top card.
 
+If you have no playable cards, you may draw a card from the pile. If you have a playable card, you must play it. You win when you run out of cards!
+
 There are some special cards in this game:
 
 - **Reverse:** When played, the order of play is reversed.
