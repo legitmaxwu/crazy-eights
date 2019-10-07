@@ -1,6 +1,6 @@
 # crazy-eights
 
-Crazy Eights, with customizeable rules!
+Crazy Eights, with customizeable rules! See `DESIGN.md` for design notes.
 
 ### Usage
 
