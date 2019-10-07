@@ -17,7 +17,7 @@ class Player(object):
       # print("Trying to play {}.".format(card.name))
       print("Trying to play card [{}].".format(self.hand.index(card) + 1))
       if not get_INSTANT_GAMEPLAY():
-        time.sleep(1)
+        time.sleep(0.3)
     if self.host_game.discardCard(card) == False: # failed to discard card (rules not obeyed)
       return False
 
@@ -25,7 +25,7 @@ class Player(object):
     if self.isNPC():
       print("... Played {}!".format(card.name))
       if not get_INSTANT_GAMEPLAY():
-        time.sleep(1)
+        time.sleep(1.5)
     self.hand.remove(card)
     return True
 
@@ -77,8 +77,8 @@ class Person(Player):
     return choice
 
   def promptName(self):
-    self.name = input("Enter a name: ")
-    print("Player created with name", self.name)
+    self.name = input("Creating a player. Enter your name: ")
+    print("... Player created with name", self.name)
     return
 
   def isNPC(self):
@@ -102,18 +102,18 @@ class NPC(Player):
       print("... Card [{}] cannot be played.".format(selection + 1))
       selection += 1
       if not get_INSTANT_GAMEPLAY():
-        time.sleep(0.3)
+        time.sleep(0.1)
       if selection >= len(self.hand):
         print("I guess none of my cards can be played. Let's draw a card!")
         Player.drawCards(self, 1)
         if not get_INSTANT_GAMEPLAY():
-          time.sleep(1)
+          time.sleep(1.5)
         return True
 
   def chooseSuit(self):
     print("Played a 'crazy' card! Choosing a suit... ")
     if not get_INSTANT_GAMEPLAY():
-      time.sleep(1)
+      time.sleep(1.5)
     return(random.choice(SUITS))
 
   def __init__(self, host_game):

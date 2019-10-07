@@ -27,8 +27,11 @@ class CrazyEightsGame(object):
 
     if top_card == None or card_played == None:
       return True
-    if self.crazy and card_played.suit == self.crazy_suit:
-      return True
+    if self.crazy:
+      if card_played.suit == self.crazy_suit:
+        return True
+      else:
+        return False
     if top_card.value == card_played.value:
       return True
     if top_card.suit == card_played.suit:
@@ -114,39 +117,62 @@ class CrazyEightsGame(object):
       self.printTurn(curr_player)
 
       # make move
+      old_discard_size = len(self.discard)
       while curr_player.makeMove() == False:
         if curr_player.isNPC() == False:
           print("... Make another move! Consider typing '999' to draw a card")
+      
+      # refresh 'crazy' if card is played
+      if len(self.discard) != old_discard_size:
+        self.crazy = False
 
       # check for special effects
-      self.crazy = False
-      if len(self.discard) > 0:
+      if len(self.discard) > 0 and len(self.discard) != old_discard_size:
         top_card = self.discard[-1]
         if 'crazy' in self.rules and top_card in self.rules['crazy']:
           chosen_suit = curr_player.chooseSuit()
           self.crazy = True
           self.crazy_suit = chosen_suit
-          os.system('cls' if os.name == 'nt' else 'clear')
-          cowsay.cow("CRAAAZY CARD! The suit is {}!".format(self.crazy_suit))
-          input("Press [Enter] to continue...")
+          if not get_INSTANT_GAMEPLAY():
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("{} played a crazy card!".format(curr_player.name))
+            cowsay.cow("CRAAAZY CARD! The suit is {}!".format(self.crazy_suit))
+            input("Press [Enter] to continue...")
         if 'reverse' in self.rules and top_card in self.rules['reverse']:
-          iterator -= 1
+          iterator = iterator * -1
+          if not get_INSTANT_GAMEPLAY():
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("{} played a reverse!".format(curr_player.name))
+            cowsay.cow("REVERSE :D".format(self.crazy_suit))
+            input("Press [Enter] to continue...")
         if 'skip' in self.rules and top_card in self.rules['skip']:
           curr_player_index += iterator
+          if not get_INSTANT_GAMEPLAY():
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("{} played a skip!".format(curr_player.name))
+            cowsay.cow("Get SKIPPED, {}!".format(self.players[curr_player_index].name))
+            input("Press [Enter] to continue...")
 
       # check for empty deck
       if len(self.deck) <= 0:
         os.system('cls' if os.name == 'nt' else 'clear')
         cowsay.cow("Deck is empty. \nShuffling the discard pile back into the deck!")
         all_but_top = self.discard[:-1]
-        self.discard = [self.discard[-1]]
-        self.deck = all_but_top
+        top_card = self.discard[-1]
+        self.discard.empty()
+        self.discard.add(top_card)
+        self.deck.add(all_but_top)
+        self.deck.shuffle()
         if not get_INSTANT_GAMEPLAY():
           time.sleep(3)
 
       # check for winner
       if len(curr_player.hand) == 0:
-        print("WE HAVE A WINNER:", curr_player.name)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(art.text2art("Winner!", chr_ignore=True))
+        cowsay.cow("The winner is... {}!".format(curr_player.name))
+        print("Thanks for playing Crazy Eights")
+        input("Press [Enter] to continue...")
         break
 
       curr_player_index += iterator
@@ -207,12 +233,18 @@ class CrazyEightsGame(object):
     os.system('cls' if os.name == 'nt' else 'clear')
     print(art.text2art("Crazy Eights", chr_ignore=True))
     print("Welcome to Crazy Eights!")
-    
+    print()
     print("Rules -- specified from `{}`".format(rules_file))
+    print("--------------------------------------------------")
     for effect in EFFECTS:
       self.printRule(effect)
+    print()
+    input("Press [Enter] to continue...")
+    print()
 
     # make people
+    print("Creating players...")
+    print()
     if num_people:
       for i in range(int(num_people)):
         self.players.append(Person(self))

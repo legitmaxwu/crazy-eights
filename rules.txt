@@ -2,3 +2,11 @@
 8 of Diamonds: wild, crazy
 8 of Hearts: wild, crazy
 8 of Clubs: wild, crazy
+Queen of Spades: skip
+Queen of Clubs: skip
+Queen of Diamonds: skip
+Queen of Hearts: skip
+Ace of Spades: reverse
+Ace of Clubs: reverse
+Ace of Diamonds: reverse
+Ace of Hearts: reverse
