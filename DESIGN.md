@@ -27,7 +27,7 @@ Flow for the game:
   - Check for winner
 - End game
 
-For a turn-based game, a loop is the best way to capture the repetitive actions during gameplay. A list specifies the order of players, and an index pointer determines whose move it is. The index pointer is guided by an iterator, which determines the order of players (forward / reverse, skipped turns) moving.
+For a turn-based game, a loop is the best way to capture the repetitive actions during gameplay. A list specifies the order of players, and an index pointer determines whose move it is. The index pointer is guided by an iterator, which determines the order of players moving. This implementation made adding 'reverse' and 'skip' functionalities very easy, as all I had to do was to modify the iterator.
 
 ### Tooling
 
