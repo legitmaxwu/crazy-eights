@@ -147,6 +147,8 @@ class CrazyEightsGame(object):
             input("Press [Enter] to continue...")
         if 'skip' in self.rules and top_card in self.rules['skip']:
           curr_player_index += iterator
+          curr_player_index = curr_player_index % num_players
+
           if not get_INSTANT_GAMEPLAY():
             os.system('cls' if os.name == 'nt' else 'clear')
             print("{} played a skip!".format(curr_player.name))
@@ -171,16 +173,13 @@ class CrazyEightsGame(object):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(art.text2art("Winner!", chr_ignore=True))
         cowsay.cow("The winner is... {}!".format(curr_player.name))
-        print("Thanks for playing Crazy Eights")
+        print("Thanks for playing Crazy Eights.")
         input("Press [Enter] to continue...")
         break
 
       curr_player_index += iterator
       num_players = len(self.players)
-      if curr_player_index >= num_players:
-        curr_player_index = curr_player_index % num_players
-      if curr_player_index < 0:
-        curr_player_index = curr_player_index % num_players
+      curr_player_index = curr_player_index % num_players
 
     return
 
@@ -223,6 +222,8 @@ class CrazyEightsGame(object):
 
     # read rules from rules file
     rules_file = args['--rules']
+    if not rules_file:
+      exit("ERROR: Please specify a rules document through the -r option.")
     self.readRules(rules_file)
 
     # make players
